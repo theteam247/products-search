@@ -3,14 +3,20 @@ import { Goods } from '/imports/api/goods/goods';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-Template.App_goods.onCreated(()=>{
-  Meteor.subscribe('goods.all');
+Template.App_goods.onCreated(function(){
+  // const k = FlowRouter.getQueryParam('keyword');
+  // console.log(k);
+  // Meteor.subscribe('goods.all', k);
+  // url地址改变之后自动获取数据
+  this.k = () => FlowRouter.getQueryParam('keyword');
+  this.autorun(() => {
+    this.subscribe('goods.all', this.k());
+  });
 });
 Template.App_goods.helpers({
   goods() {
-    const k = FlowRouter.getQueryParam('keyword');
-    console.log(k);
     return Goods.find();
+    // return Meteor.subscribe('goods.all',k);
   },
   // 生成商品序号 索引加一
   num(i) {
@@ -33,7 +39,7 @@ Template.App_goods.events({
   },
   'submit #mainForm'(event, instance) {
     event.preventDefault();
-    console.dir(instance);
+    // console.dir(instance);
     const target = event.target;
     const keyword = target.keyword.value.trim();
     if (keyword) {
