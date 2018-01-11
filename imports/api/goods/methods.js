@@ -5,6 +5,11 @@ import { validateEmpty, validatePrice } from '../../utils/validates';
 
 
 Meteor.methods({
+  // 查询单条记录
+  'goods.findOne'(id) {
+    // console.log(id);
+    return Goods.findOne(id);
+  },
   'goods.insert'(doc, cb) {
     // console.group('新增----');
     console.dir(doc);

@@ -46,7 +46,8 @@ Template.App_goods.events({
       FlowRouter.go('/goods?keyword='+keyword);
     }
     else {
-      alert('请输入要查询的关键字');
+      // alert('请输入要查询的关键字');
+      FlowRouter.go('/goods?keyword=');
     }
   }
 });

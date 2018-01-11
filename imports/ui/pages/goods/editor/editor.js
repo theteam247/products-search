@@ -1,6 +1,7 @@
 import { Goods } from '/imports/api/goods/goods';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import {ReactiveDict} from 'meteor/reactive-dict'; // 用于解决页面内部数据状态问题,实现数据绑定传递
 import './editor.html';
 
 /**
@@ -10,13 +11,20 @@ function getId() {
    return FlowRouter.getQueryParam('id');
 }
 // console.dir(Template);
-Template.App_goods_editor.onCreated(()=>{
+Template.App_goods_editor.onCreated(function(){
+  this.state = new ReactiveDict();
+  this.state.setDefault({
+    Goods: {}, // 当前数据
+  });
 });
 Template.App_goods_editor.helpers({
   goods() {
-    return Goods.findOne(getId());
+    const i = Template.instance();
+    Meteor.call('goods.findOne',getId(),function(err, d){
+      i.state.set('Goods',d);
+    });
+    return Template.instance().state.get('Goods');
   },
-  // isSave: false,
 });
 Template.App_goods_editor.events({
   'submit #mainForm'(event) {

@@ -30,7 +30,9 @@ Meteor.publish('goods.all', function (key) {
   }
 });
 
-Meteor.publish('goods.findOne', function(id) {
-  // console.log('xxxxx')
-  return Goods.findOne(id);
-})
+// Meteor.publish('goods.findOne', function(id) {
+//   console.log('xxxxx')
+//   console.log(id);
+//   console.log(Goods.findOne(id));
+//   return Goods.findOne(id);
+// })
