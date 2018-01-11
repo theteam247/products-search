@@ -10,16 +10,24 @@ import gql from 'graphql-tag';
 const client = new ApolloClient(meteorClientConfig());
 setup({ client });
 
-Template.App_goods.onCreated(function(){
-  this.state = new ReactiveDict();
-  this.state.setDefault({
-    allGoods: [], // 所有的数据
-  });
-  // 初始化查询
+/**
+ * 重新加载数据
+ * @param {*} instanceT 实例
+ * @param {*} keyword   查询关键字
+ */
+function loadData(instanceT,keyword) {
+  console.log('11');
+  if(keyword){}
+  else{
+    keyword = '';
+  }
+  // 重新加载数据
+  // const keyword = FlowRouter.getQueryParam('id');
+  // const ss = Template.instance(); // 转存实例
   const res = Template.instance().gqlQuery({
     query: gql`
     query{
-        GoodsAll(keyword: "") {
+        GoodsAll(keyword: "${keyword}") {
         _id
         name
         img
@@ -30,9 +38,19 @@ Template.App_goods.onCreated(function(){
     }
     `
   });
-  res.then(res=>{
-    this.state.set('allGoods',res.GoodsAll);//Goods.find();
+  // instanceT.state.set('allGoods',res.GoodsAll);
+  res.then(d=>{
+    instanceT.state.set('allGoods',d.GoodsAll);//Goods.find();
   })
+}
+
+Template.App_goods.onCreated(function(){
+  // console.log('11');
+  this.state = new ReactiveDict();
+  this.state.setDefault({
+    allGoods: [], // 所有的数据
+  });
+  loadData(this,'');
 });
 Template.App_goods.helpers({
   goods() {
@@ -45,7 +63,7 @@ Template.App_goods.helpers({
     return i+1;
   },
   editor() {
-    console.log(Template.instance().state);
+    // console.log(Template.instance().state);
     return Template.instance().state.get('editing');
   }
 });
@@ -73,6 +91,8 @@ Template.App_goods.events({
       }).catch(err=>{
         console.log(err);
       })
+      // 重制数据
+      loadData(Template.instance(),FlowRouter.getQueryParam('keyword'));
     }
   },
   'submit #mainForm'(event, instance) {
@@ -82,24 +102,7 @@ Template.App_goods.events({
     const keyword = target.keyword.value.trim();
 
     // 根据条件查询数据
-    const ss = Template.instance(); // 转存实例
-    const res = Template.instance().gqlQuery({
-      query: gql`
-      query{
-          GoodsAll(keyword: "${keyword}") {
-          _id
-          name
-          img
-          price
-          description
-          content
-        }
-      }
-      `
-    });
-    res.then(res=>{
-      ss.state.set('allGoods',res.GoodsAll);//Goods.find();
-    })
+    loadData(Template.instance(),keyword);
     if (keyword) {
       FlowRouter.go('/goods?keyword='+keyword);
     }

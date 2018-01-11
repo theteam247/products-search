@@ -11,8 +11,8 @@ export const resolvers = {
     },
     GoodsAll: async (root, args, context) => {
       const key = args.keyword;
-      // console.log('我正在查询----')
-      // console.log(args);
+      console.log('我正在查询----')
+      console.log(args);
       if (key) {
         var reg = new RegExp(key);
         const res = await Goods.find({$or:[{

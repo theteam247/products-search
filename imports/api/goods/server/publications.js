@@ -16,21 +16,21 @@ import { Client } from 'elasticsearch';
 //   }
 // });
 
-Meteor.publish('goods.all', function (key) {
-  // console.log(key);
-  if (key) {
-    var reg = new RegExp(key);
-    return Goods.find({$or:[{
-      name: { $regex: reg},
-    }, {
-      description: { $regex: reg},
-    }]});
-  } else {
-    return Goods.find({});
-  }
-});
+// Meteor.publish('goods.all', function (key) {
+//   // console.log(key);
+//   if (key) {
+//     var reg = new RegExp(key);
+//     return Goods.find({$or:[{
+//       name: { $regex: reg},
+//     }, {
+//       description: { $regex: reg},
+//     }]});
+//   } else {
+//     return Goods.find({});
+//   }
+// });
 
-Meteor.publish('goods.findOne', function(id) {
-  console.log('xxxxx')
-  return Goods.findOne(id);
-})
+// Meteor.publish('goods.findOne', function(id) {
+//   console.log('xxxxx')
+//   return Goods.findOne(id);
+// })
