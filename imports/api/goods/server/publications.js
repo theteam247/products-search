@@ -17,7 +17,7 @@ import { Client } from 'elasticsearch';
 // });
 
 Meteor.publish('goods.all', function (key) {
-  console.log(key);
+  // console.log(key);
   if (key) {
     var reg = new RegExp(key);
     return Goods.find({$or:[{
@@ -31,6 +31,6 @@ Meteor.publish('goods.all', function (key) {
 });
 
 Meteor.publish('goods.findOne', function(id) {
-  // console.log('xxxxx')
+  console.log('xxxxx')
   return Goods.findOne(id);
 })
