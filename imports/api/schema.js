@@ -9,7 +9,7 @@ type Goods {
 }
 type Query {
   Goods(id: String): Goods
-  GoodsAll(keyword: String): [Goods]
+  GoodsAll(keyword: String, r: String): [Goods]
 }
 type Mutation {
   createGoods(name: String, img: String, price: String, description: String, content: String): Goods

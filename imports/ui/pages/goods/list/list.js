@@ -9,6 +9,7 @@ import { setup } from 'meteor/swydo:blaze-apollo';
 import gql from 'graphql-tag';
 const client = new ApolloClient(meteorClientConfig());
 setup({ client });
+// const _instance = Template.instance();
 
 /**
  * 重新加载数据
@@ -16,18 +17,16 @@ setup({ client });
  * @param {*} keyword   查询关键字
  */
 function loadData(instanceT,keyword) {
-  console.log('11');
+  // console.log('11');
   if(keyword){}
   else{
     keyword = '';
   }
   // 重新加载数据
-  // const keyword = FlowRouter.getQueryParam('id');
-  // const ss = Template.instance(); // 转存实例
-  const res = Template.instance().gqlQuery({
+  const res = instanceT.gqlQuery({
     query: gql`
     query{
-        GoodsAll(keyword: "${keyword}") {
+        GoodsAll(keyword: "${keyword}", r: "${Math.random()}") {
         _id
         name
         img
@@ -36,9 +35,9 @@ function loadData(instanceT,keyword) {
         content
       }
     }
-    `
-  });
-  // instanceT.state.set('allGoods',res.GoodsAll);
+    `});
+  // instanceT.state.set('allGoods',[]);
+  // console.log(res);
   res.then(d=>{
     instanceT.state.set('allGoods',d.GoodsAll);//Goods.find();
   })
@@ -50,6 +49,7 @@ Template.App_goods.onCreated(function(){
   this.state.setDefault({
     allGoods: [], // 所有的数据
   });
+  console.log(this);
   loadData(this,'');
 });
 Template.App_goods.helpers({
@@ -69,6 +69,7 @@ Template.App_goods.helpers({
 });
 Template.App_goods.events({
   'click .btn-del'(event) {
+    const i = Template.instance();
     // console.log(event.currentTarget.dataset.id);
     if(confirm('是否删除指定项目')){
       const res = Template.instance().gqlMutate({
@@ -88,11 +89,11 @@ Template.App_goods.events({
       // console.log(res);
       res.then(r=>{
         console.log(r);
+        // 重制数据
+        loadData(i,FlowRouter.getQueryParam('keyword'));
       }).catch(err=>{
         console.log(err);
       })
-      // 重制数据
-      loadData(Template.instance(),FlowRouter.getQueryParam('keyword'));
     }
   },
   'submit #mainForm'(event, instance) {
