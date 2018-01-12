@@ -26,5 +26,5 @@ less@2.7.11                    # Leaner CSS language
 #apollo
 #swydo:blaze-apollo
 reactive-dict
-# easy:search
-# easysearch:elasticsearch
+easy:search
+easysearch:elasticsearch

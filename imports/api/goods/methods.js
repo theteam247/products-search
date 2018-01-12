@@ -1,10 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
-import { Goods } from './goods';
+import { Goods, searchGoods } from './goods';
 import { validateEmpty, validatePrice } from '../../utils/validates';
 
 
 Meteor.methods({
+  // 查询所有的数据, 使用elasticsearch
+  'goods.all'(key) {
+    console.log('调用查询方法');
+    return searchGoods(key);
+  },
   // 查询单条记录
   'goods.findOne'(id) {
     // console.log(id);
@@ -12,8 +17,8 @@ Meteor.methods({
   },
   'goods.insert'(doc, cb) {
     // console.group('新增----');
-    console.dir(doc);
-    console.dir(cb);
+    // console.dir(doc);
+    // console.dir(cb);
     // console.groupEnd();
     // check(doc.name, String);
     // check(Number(doc.price), Number);
